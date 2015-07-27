@@ -1,7 +1,8 @@
 class ExpendituresController < ApplicationController
 
   def index
-    @expenditures = Expenditure.all.order(purchase_date: :desc)
+    @expenditures = Expenditure.where(user_id: current_user.id).order(purchase_date: :desc)
+
   end
 
   def new
@@ -9,7 +10,7 @@ class ExpendituresController < ApplicationController
   end
 
   def create
-    @expenditure = Expenditure.new(expenditure_params)
+    @expenditure = current_user.expenditures.build(expenditure_params)
     if @expenditure.save
       redirect_to expenditure_path(@expenditure)
     else
